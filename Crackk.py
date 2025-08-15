@@ -18,7 +18,7 @@ HEADERS = {"Content-Type": "application/json"}
 
 # --- Cấu hình Bot Telegram ---
 # Đã cập nhật token của bạn
-TELEGRAM_BOT_TOKEN = "" 
+TELEGRAM_BOT_TOKEN = "8242425705:AAECxLuu3-l4u0TDJA7uco3pRkAcwpk1xgs" 
 
 # Dictionary để lưu trữ thông tin tài khoản email ảo cho mỗi người dùng Telegram
 # Key: chat_id (ID của người dùng Telegram)
