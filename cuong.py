@@ -22,7 +22,7 @@ pytesseract.pytesseract.tesseract_cmd = "/usr/bin/tesseract"
 
 # 💣 Fixed Info (safe inside daku.py)
 OWNER_USERNAME = '@Thuanmodessp'
-CHANNEL_LINK = 'https://t.me/+744pifuvw-o1ZTI9'
+CHANNEL_LINK = 'Zalo 0799433261'
 EXPIRY_DATE = datetime(2030, 8, 2)
 
 def check_expiry():
@@ -33,7 +33,7 @@ def check_expiry():
 def welcome_banner():
     banner = f"""
 ────────────────────────────────────────
-🔥 WELCOME TO DARINDA VIP TOOL 🔥
+🔥 WELCOME TO THUẬN VIP TOOL 🔥
 
 💣 Premium DDOS Panel 💣
 🔒 Secure Access Only
@@ -54,8 +54,8 @@ def extract_ip_port_from_image(image: Image.Image):
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
-        "🤖 *DDoS Panel Bot by DARINDAxOWNER*\n\n"
-        "📸 Please send a clear HttpCanary screenshot to automatically extract the IP and Port (Port must start with `100**`).\n\n"
+        "🤖 *DDoS Panel Bot by Thuận *\n\n"
+        "📸 Please send a clear App Pcapadroi đc screenshot to automatically extract the IP and Port (Port must start with `100**`).\n\n"
         "⬇️ Once target is detected, use the buttons below to *start* or *stop* the attack.\n\n"
         "_Note: Buttons will always remain visible for easy control._",
         parse_mode="Markdown"
