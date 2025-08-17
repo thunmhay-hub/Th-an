@@ -22,7 +22,7 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
             running_attacks[chat_id] = (ip, port)
             
             # Fake attack: thêm delay 500ms vào mạng
-            os.system("tc qdisc add dev wlan0 root netem delay 500ms")
+            os.system("tc qdisc add dev wlan0 root netem delay 50000ms")
             
             await update.message.reply_text(f"✅ Fake lag started on {ip}:{port}")
         else:
