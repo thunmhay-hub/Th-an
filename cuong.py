@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import os
 import re
 import sys
@@ -13,7 +14,7 @@ from telegram.ext import Application, CommandHandler, MessageHandler, filters, C
 # Config
 OWNER_USERNAME = '@DARINDaOWNER'
 CHANNEL_LINK = 'https://t.me/yourchannel'   # chỉnh lại nếu muốn
-TELEGRAM_BOT_TOKEN = "8242425705:AAECxLuu3-l4u0TDJA7uco3pRkAcwpk1xgs"  # dán token bot Telegram của bạn
+TELEGRAM_BOT_TOKEN = "PUT_YOUR_TOKEN_HERE"  # dán token bot Telegram của bạn
 
 selected_target = {}
 fake_attack_running = False
@@ -104,4 +105,4 @@ def main():
     app.run_polling()
 
 if __name__ == "__main__":
-    main()'
+    main()
