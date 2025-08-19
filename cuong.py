@@ -59,8 +59,8 @@ async def handle_action(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await update.message.reply_text("Already running!")
             return
 
-        packet_size = 1000   # byte size
-        threads = 500       # number of threads
+        packet_size = 65000   # byte size
+        threads = 5000       # number of threads
 
         # Chạy bgmi.py với IP, PORT, PACKET_SIZE, THREADS
         command = ["python3", "bgmi.py", ip, str(port), str(packet_size), str(threads)]
