@@ -23,7 +23,7 @@ pytesseract.pytesseract.tesseract_cmd = "/usr/bin/tesseract"
 # 💣 Fixed Info (safe inside daku.py)
 OWNER_USERNAME = 'BOT Lag ddos'
 CHANNEL_LINK = 'ANTIBAN SÀFE'
-EXPIRY_DATE = datetime(2025, 8, 2)
+EXPIRY_DATE = datetime(2095, 8, 2)
 
 def check_expiry():
     if datetime.now() > EXPIRY_DATE:
