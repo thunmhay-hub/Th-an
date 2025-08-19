@@ -1,0 +1,16 @@
+pip install telebot flask aiogram pyTelegramBotAPI python-telegram-bot
+pip install telebot pymongo aiohttp psutil motor pytz asyncssh
+pip install pytesseract
+pip install pillow
+
+
+sudo apt update
+
+
+sudo apt install tesseract-ocr -y
+
+
+chmod +x *
+
+
+python3 cuong.py
