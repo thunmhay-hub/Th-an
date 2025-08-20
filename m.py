@@ -48,10 +48,10 @@ allowed_user_ids = read_users()
 
 # Function to log command to the file
 def log_command(user_id, target, port, time):
-    admin_id = ["5935306519"]
+    admin_id = ["8333481006"]
     user_info = bot.get_chat(user_id)
     if user_info.username:
-        username = "@" + user_info.username
+        username = "@Thuanmodgame" + user_info.username
     else:
         username = f"UserID: {user_id}"
     
@@ -451,5 +451,6 @@ while True:
         bot.polling(none_stop=True)
     except Exception as e:
         print(e)
+
 
 
