@@ -6,7 +6,7 @@ import datetime
 import os
 
 # insert your Telegram bot token here
-bot = telebot.TeleBot('http://t.me/botlagudp_bot')
+bot = telebot.TeleBot('8333481006:AAFNGkXsr-HYRAoAKzTCBldYLyouZw-Paxs')
 
 # Admin user IDs
 admin_id = ["8111336249"]
@@ -365,4 +365,5 @@ def broadcast_message(message):
 
     bot.reply_to(message, response)
 bot.polling()
+
  #ReporterAlpha
